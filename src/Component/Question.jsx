@@ -1,21 +1,29 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./style.css";
 
 const Question = () => {
   
-  const [questionText, setQuestionText] = useState('');
+  const [question, setQuestion] = useState('');
   
   const handleQuestion = (e) => {
-    setQuestionText(e.target.value);
+    setQuestion(e.target.value);
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setQuestionText('');
+    
+    try {
+      const response = await axios.post('http://localhost:5000/v2/question', {
+        question: question
+      });
+
+      setQuestion('')
+      
+    } catch (error) {
+      console.log(error)
+    }
   }
-
-
 
   return (
     <div className="container">
@@ -24,7 +32,7 @@ const Question = () => {
       <form onSubmit={handleSubmit}>
         <div className="input">
           <span>Question</span>
-          <textarea value={questionText} onChange={handleQuestion} />
+          <textarea value={question} onChange={handleQuestion} />
         </div>
 
         <button className="btn" type="submit">Submit</button>
